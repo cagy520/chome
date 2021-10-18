@@ -33,7 +33,11 @@ namespace chome
             this.btnGo = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.cboUrl = new System.Windows.Forms.ComboBox();
+            this.btnSpk = new System.Windows.Forms.Button();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.txtInfo = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.webView21)).BeginInit();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // webView21
@@ -45,7 +49,7 @@ namespace chome
             this.webView21.DefaultBackgroundColor = System.Drawing.Color.White;
             this.webView21.Location = new System.Drawing.Point(-1, 50);
             this.webView21.Name = "webView21";
-            this.webView21.Size = new System.Drawing.Size(1768, 838);
+            this.webView21.Size = new System.Drawing.Size(1768, 815);
             this.webView21.TabIndex = 0;
             this.webView21.ZoomFactor = 1D;
             // 
@@ -76,12 +80,40 @@ namespace chome
             this.cboUrl.Size = new System.Drawing.Size(881, 28);
             this.cboUrl.TabIndex = 4;
             // 
+            // btnSpk
+            // 
+            this.btnSpk.Location = new System.Drawing.Point(1469, 12);
+            this.btnSpk.Name = "btnSpk";
+            this.btnSpk.Size = new System.Drawing.Size(94, 29);
+            this.btnSpk.TabIndex = 6;
+            this.btnSpk.Text = "语音识别";
+            this.btnSpk.UseVisualStyleBackColor = true;
+            this.btnSpk.Click += new System.EventHandler(this.btnSpk_Click);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.txtInfo});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 868);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(1766, 22);
+            this.statusStrip1.TabIndex = 9;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // txtInfo
+            // 
+            this.txtInfo.Name = "txtInfo";
+            this.txtInfo.Size = new System.Drawing.Size(0, 16);
+            // 
             // FrmMain
             // 
             this.AcceptButton = this.btnGo;
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1766, 890);
+            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.btnSpk);
             this.Controls.Add(this.cboUrl);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnGo);
@@ -90,6 +122,8 @@ namespace chome
             this.Text = "Chome Explorer";
             this.Load += new System.EventHandler(this.FrmMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.webView21)).EndInit();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -101,6 +135,9 @@ namespace chome
         private System.Windows.Forms.Button btnGo;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cboUrl;
+        private System.Windows.Forms.Button btnSpk;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel txtInfo;
     }
 }
 
