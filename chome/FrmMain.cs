@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
-
+using aichome;
 namespace chome
 {
     public partial class FrmMain : Form
@@ -176,5 +176,16 @@ namespace chome
             }
         }
 
+        private void btnAI_Click(object sender, EventArgs e)
+        {
+            LoadCode lc = new LoadCode();
+            MessageBox.Show(lc.LoadModel());
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            FrmCode fc = new FrmCode();
+            fc.Show();
+        }
     }
 }
