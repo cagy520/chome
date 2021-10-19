@@ -114,7 +114,7 @@ namespace chome
         //}
         private async Task fromMicAsync()
         {
-            var speechConfig = SpeechConfig.FromSubscription("5aea227bdc4b45f6a8977d3a4dea1c35", "eastasia");
+            var speechConfig = SpeechConfig.FromSubscription("5aea227bdc4b45f6a8977d3a4dea1c350", "eastasia");
             speechConfig.SpeechRecognitionLanguage = "zh-CN";
             //speechConfig.EnableDictation();
             using var audioConfig = AudioConfig.FromDefaultMicrophoneInput();
@@ -139,7 +139,7 @@ namespace chome
 
         public async Task SynthesisToSpeakerAsync(string text)
         {
-            var config = SpeechConfig.FromSubscription("5aea227bdc4b45f6a8977d3a4dea1c35", "eastasia");
+            var config = SpeechConfig.FromSubscription("5aea227bdc4b45f6a8977d3a4dea1c350", "eastasia");
             config.SpeechRecognitionLanguage = "zh-CN";
             config.SpeechSynthesisLanguage = "zh-CN";
             //https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/language-support#neural-voices
