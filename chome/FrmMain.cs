@@ -123,11 +123,14 @@ namespace chome
             var result = await recognizer.RecognizeOnceAsync();
             txtInfo.Text = result.Text;
             //Console.WriteLine($"RECOGNIZED: Text={result.Text}");
-            if (result.Text.Contains("打开百度"))
-            {
-                SynthesisToSpeakerAsync("好的，已经帮你打开了百度，但是能不能显示我就不知道了");
-                load("https://www.baidu.com");
-            }
+            //if (result.Text.Contains("打开百度"))
+            //{
+            //    SynthesisToSpeakerAsync("好的，已经帮你打开了百度，但是能不能显示我就不知道了");
+            //    load("https://www.baidu.com");
+            //}
+            LoadCode lc = new LoadCode();
+            SynthesisToSpeakerAsync(lc.LoadModel(result.Text));
+
             btnSpk.Enabled = true;
         }
 

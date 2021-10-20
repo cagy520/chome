@@ -8,28 +8,30 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
-
+/*****
+ * 语义分析模块
+ * 2021年10月19日
+ * 1.获取
+ * 2.先有一个基础，然后增加一层，对对话的类容进行分类
+ * 3.计算类、问答类、感情类、功能类、
+ * ******/
 
 namespace aichome
 {
     public class LoadCode
     {
-
-
-
-        public string LoadModel()
+        public string LoadModel(string txt)
         {
             var script = CSharpScript.RunAsync(LoadFile()).Result;
-            string txt = @"new Test().Get(""cagy"")";
-            var result = script.ContinueWithAsync<string>(txt).Result;
-            //Console.WriteLine(result.ReturnValue);
+            string execode = "new QA().Get("+txt+")";
+            var result = script.ContinueWithAsync<string>(execode).Result;
             return result.ReturnValue;
         }
 
 
         public string LoadFile()
         {
-            StreamReader rd = new StreamReader("Test.cs");
+            StreamReader rd = new StreamReader("QA.cs");
             string code = rd.ReadToEnd();
             rd.Close();
             return code;
