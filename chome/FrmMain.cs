@@ -40,8 +40,10 @@ namespace chome
             if (!url.Contains("http://") && !url.Contains("https://")) return "http://" + url;
             return url;
         }
+        bool isOpen = false;
         private void load(string url)
         {
+            isOpen = true;
             try
             {
                 this.webView21.Source = new System.Uri(url, System.UriKind.Absolute);
@@ -117,6 +119,7 @@ namespace chome
         //}
         private async Task fromMicAsync()
         {
+            isOpen = false;
             var speechConfig = SpeechConfig.FromSubscription("5aea227bdc4b45f6a8977d3a4dea1c350", "eastasia");
             speechConfig.SpeechRecognitionLanguage = "zh-CN";
             //speechConfig.EnableDictation();
@@ -126,42 +129,61 @@ namespace chome
             var result = await recognizer.RecognizeOnceAsync();
             txtInfo.Text = result.Text;
             //Console.WriteLine($"RECOGNIZED: Text={result.Text}");
-            //if (result.Text.Contains("打开百度"))
-            //{
-            //    SynthesisToSpeakerAsync("好的，已经帮你打开了百度，但是能不能显示我就不知道了");
-            //    load("https://www.baidu.com");
-            //}
-            LoadCode lc = new LoadCode();
-            SynthesisToSpeakerAsync(GetRes(result.Text));
-            
+            string t = Regex.Replace(result.Text, "[ \\[ \\] \\^ \\-_*×――(^)（^）$%~!@#$…&%￥—+=<>《》!！??？:：•`·、。，；,.;\"‘’“”-]", "");
+            spkCheck(t);
+            if (isOpen)
+                SynthesisToSpeakerAsync("好的");
+            else
+                SynthesisToSpeakerAsync(GetRes(result.Text));
+
             btnSpk.Enabled = true;
         }
-
+        private void spkCheck(string t)
+        {
+            
+            t = t.ToUpper();
+            if (t.Contains("打开百度")) load("https://www.baidu.com");
+            if (t.Contains("打开谷歌")) load("https://www.google.com");
+            if (t.Contains("打开必应")) load("https://www.bing.com");
+            if (t.Contains("打开CSDN")) load("https://www.csdn.com");
+            if (t.Contains("打开淘宝")) load("http://www.taobao.com");
+            if (t.Contains("打开腾讯")) load("http://www.qq.com");
+            if (t.Contains("打开京东")) load("https://www.jd.com");
+            if (t.Contains("打开百度地图")) load("https://map.baidu.com");
+            if (t.Contains("打开17173")) load("https://www.17173.com");
+            if (t.Contains("打开富能通")) load("https://www.funenc.com");
+           
+            
+        }
 
 
         private string GetRes(string t)
         {
             if (t == "") return "";
-            t = Regex.Replace(t, "[ \\[ \\] \\^ \\-_*×――(^)（^）$%~!@#$…&%￥—+=<>《》!！??？:：•`·、。，；,.;\"‘’“”-]", "");
-            string connString = "Host=fun.cagy.io;Port=2088;Username=postgres;Password=173542558;Database=chome";
+            
+            string connString = "Host=io;Port=288;Username=postgres;Password=;Database=chome";
             using (var conn = new NpgsqlConnection(connString))
             {
                 conn.Open();
-                using (NpgsqlCommand cmd = new NpgsqlCommand("select an from qa where q ='"+t+"' limit 1", conn))
+                using (NpgsqlCommand cmd = new NpgsqlCommand("select an from qa where q = '"+t+"' limit 1", conn))
                 {
                     string res = "";
                     try
                     {
-                        res = cmd.ExecuteScalar().ToString();
-                        conn.Close();
-                        return res;
+                        object o = cmd.ExecuteScalar();
+                        if (o != null)
+                        {
+                            res = o.ToString();
+                            conn.Close();
+                            return res;
+                        }
                     }
                     catch (Exception ex)
                     {
                         Console.WriteLine("插入数据库的异常:" + ex.Message + "sql:" + t);
                         conn.Close();
                     }
-                    return "Sorry，没听明白你的意思，我可能还有点傻！";
+                    return "Sorry，我可能还有点傻！";
                 }
             }
         }
@@ -175,7 +197,7 @@ namespace chome
         public async Task SynthesisToSpeakerAsync(string text)
         {
             if (text == "") return;
-            var config = SpeechConfig.FromSubscription("5aea227bdc4b45f6a8977d3a4dea1c350", "eastasia");
+            var config = SpeechConfig.FromSubscription("5aea227bdc4b45f6a8977d3a4dea1c35", "eastasia");
             config.SpeechRecognitionLanguage = "zh-CN";
             config.SpeechSynthesisLanguage = "zh-CN";
             //https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/language-support#neural-voices
