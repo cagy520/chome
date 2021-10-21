@@ -11,6 +11,9 @@ using System.Windows.Forms;
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
 using aichome;
+using Npgsql;
+using System.Text.RegularExpressions;
+
 namespace chome
 {
     public partial class FrmMain : Form
@@ -129,9 +132,38 @@ namespace chome
             //    load("https://www.baidu.com");
             //}
             LoadCode lc = new LoadCode();
-            SynthesisToSpeakerAsync(lc.LoadModel(result.Text));
-
+            SynthesisToSpeakerAsync(GetRes(result.Text));
+            
             btnSpk.Enabled = true;
+        }
+
+
+
+        private string GetRes(string t)
+        {
+            if (t == "") return "";
+            t = Regex.Replace(t, "[ \\[ \\] \\^ \\-_*×――(^)（^）$%~!@#$…&%￥—+=<>《》!！??？:：•`·、。，；,.;\"‘’“”-]", "");
+            string connString = "Host=fun.cagy.io;Port=2088;Username=postgres;Password=173542558;Database=chome";
+            using (var conn = new NpgsqlConnection(connString))
+            {
+                conn.Open();
+                using (NpgsqlCommand cmd = new NpgsqlCommand("select an from qa where q ='"+t+"' limit 1", conn))
+                {
+                    string res = "";
+                    try
+                    {
+                        res = cmd.ExecuteScalar().ToString();
+                        conn.Close();
+                        return res;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("插入数据库的异常:" + ex.Message + "sql:" + t);
+                        conn.Close();
+                    }
+                    return "Sorry，没听明白你的意思，我可能还有点傻！";
+                }
+            }
         }
 
         private void btnSpk_Click(object sender, EventArgs e)
@@ -142,6 +174,7 @@ namespace chome
 
         public async Task SynthesisToSpeakerAsync(string text)
         {
+            if (text == "") return;
             var config = SpeechConfig.FromSubscription("5aea227bdc4b45f6a8977d3a4dea1c350", "eastasia");
             config.SpeechRecognitionLanguage = "zh-CN";
             config.SpeechSynthesisLanguage = "zh-CN";
@@ -181,8 +214,8 @@ namespace chome
 
         private void btnAI_Click(object sender, EventArgs e)
         {
-            LoadCode lc = new LoadCode();
-            MessageBox.Show(lc.LoadModel());
+            //LoadCode lc = new LoadCode();
+            //MessageBox.Show(lc.LoadModel());
         }
 
         private void button1_Click(object sender, EventArgs e)

@@ -20,12 +20,13 @@ namespace aichome
 {
     public class LoadCode
     {
-        public string LoadModel(string txt)
+        public string LoadModel(string t)
         {
             var script = CSharpScript.RunAsync(LoadFile()).Result;
-            string execode = "new QA().Get("+txt+")";
+            string execode = "new QA().Get(" + t + ")";
             var result = script.ContinueWithAsync<string>(execode).Result;
             return result.ReturnValue;
+
         }
 
 

@@ -7,19 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="QA.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ICSharpCode.TextEditorEx" Version="1.1.0" />
     <PackageReference Include="Microsoft.CognitiveServices.Speech" Version="1.18.0" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.992.28" />
+    <PackageReference Include="Npgsql" Version="5.0.10" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\aichome\aichome.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="QA.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
   </ItemGroup>
 
 </Project>
