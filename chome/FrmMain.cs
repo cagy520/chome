@@ -120,7 +120,7 @@ namespace chome
         private async Task fromMicAsync()
         {
             isOpen = false;
-            var speechConfig = SpeechConfig.FromSubscription("5aea227bdc4b45f6a8977d3a4dea1c350", "eastasia");
+            var speechConfig = SpeechConfig.FromSubscription(new LoadCode().k, new LoadCode().v);
             speechConfig.SpeechRecognitionLanguage = "zh-CN";
             //speechConfig.EnableDictation();
             using var audioConfig = AudioConfig.FromDefaultMicrophoneInput();
@@ -129,12 +129,12 @@ namespace chome
             var result = await recognizer.RecognizeOnceAsync();
             txtInfo.Text = result.Text;
             //Console.WriteLine($"RECOGNIZED: Text={result.Text}");
-            string t = Regex.Replace(result.Text, "[ \\[ \\] \\^ \\-_*×――(^)（^）$%~!@#$…&%￥—+=<>《》!！??？:：•`·、。，；,.;\"‘’“”-]", "");
+            string t = result.Text.Replace("。","").Replace("?","").Replace("？","");//Regex.Replace(result.Text, "[ \\[ \\] \\^ \\-_*×――(^)（^）$%~!@#$…&%￥—+=<>《》!！??？:：•`·、。，；,.;\"‘’“”-]", "");
             spkCheck(t);
             if (isOpen)
-                SynthesisToSpeakerAsync("好的");
+                SynthesisToSpeakerAsync("好的，正在帮你打开");
             else
-                SynthesisToSpeakerAsync(GetRes(result.Text));
+                SynthesisToSpeakerAsync(new LoadCode().LoadModel(result.Text));
 
             btnSpk.Enabled = true;
         }
@@ -157,36 +157,6 @@ namespace chome
         }
 
 
-        private string GetRes(string t)
-        {
-            if (t == "") return "";
-            
-            string connString = "Host=io;Port=288;Username=postgres;Password=;Database=chome";
-            using (var conn = new NpgsqlConnection(connString))
-            {
-                conn.Open();
-                using (NpgsqlCommand cmd = new NpgsqlCommand("select an from qa where q = '"+t+"' limit 1", conn))
-                {
-                    string res = "";
-                    try
-                    {
-                        object o = cmd.ExecuteScalar();
-                        if (o != null)
-                        {
-                            res = o.ToString();
-                            conn.Close();
-                            return res;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("插入数据库的异常:" + ex.Message + "sql:" + t);
-                        conn.Close();
-                    }
-                    return "Sorry，我可能还有点傻！";
-                }
-            }
-        }
 
         private void btnSpk_Click(object sender, EventArgs e)
         {
@@ -197,7 +167,7 @@ namespace chome
         public async Task SynthesisToSpeakerAsync(string text)
         {
             if (text == "") return;
-            var config = SpeechConfig.FromSubscription("5aea227bdc4b45f6a8977d3a4dea1c35", "eastasia");
+            var config = SpeechConfig.FromSubscription(new LoadCode().k, new LoadCode().v);
             config.SpeechRecognitionLanguage = "zh-CN";
             config.SpeechSynthesisLanguage = "zh-CN";
             //https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/language-support#neural-voices
