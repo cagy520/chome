@@ -16,7 +16,7 @@ namespace Chome
         public FrmWeb()
         {
             InitializeComponent();
-            CreateNewPage("");
+            CreateNewPage("","tp");
         }
 
 
@@ -26,7 +26,7 @@ namespace Chome
         /// 创建页面
         /// </summary>
         /// <param name="url"></param>
-        public void CreateNewPage(string url)
+        public void CreateNewPage(string url,string tp)
         {
             DevExpress.XtraEditors.Repository.RepositoryItemTextEdit repositoryItemTextEdit1;
             DevExpress.XtraEditors.Repository.RepositoryItemComboBox repositoryItemComboBox1;
@@ -206,15 +206,15 @@ namespace Chome
             repositoryItemTextEdit1,
             repositoryItemComboBox1});
 
-            Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            //Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             Appearance.Options.UseBackColor = true;
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(995, 633);
-            Controls.Add(barDockControlLeft);
-            Controls.Add(barDockControlRight);
-            Controls.Add(barDockControlBottom);
-            Controls.Add(barDockControlTop);
+            tpHome.Controls.Add(barDockControlLeft);
+            tpHome.Controls.Add(barDockControlRight);
+            tpHome.Controls.Add(barDockControlBottom);
+            tpHome.Controls.Add(barDockControlTop);
             IsMdiContainer = true;
             Name = "FrmMain";
             Text = "Chome Explorer";
