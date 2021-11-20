@@ -1,4 +1,8 @@
-﻿using DevExpress.XtraEditors;
+﻿using DevExpress.XtraBars;
+using DevExpress.XtraBars.Navigation;
+using DevExpress.XtraEditors;
+using Microsoft.Web.WebView2.Core;
+using Microsoft.Web.WebView2.WinForms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,17 +20,17 @@ namespace Chome
         public FrmWeb()
         {
             InitializeComponent();
-            CreateNewPage("","tp");
+
+
+            CreatePage("https://blog.csdn.net/ccagy", "主页");
+            CreatePage("https://www.baidu.com", "百度");
         }
-
-
-
 
         /// <summary>
         /// 创建页面
         /// </summary>
         /// <param name="url"></param>
-        public void CreateNewPage(string url,string tp)
+        public async void CreatePage(string url, string tpName)
         {
             DevExpress.XtraEditors.Repository.RepositoryItemTextEdit repositoryItemTextEdit1;
             DevExpress.XtraEditors.Repository.RepositoryItemComboBox repositoryItemComboBox1;
@@ -44,6 +48,8 @@ namespace Chome
             DevExpress.XtraBars.BarDockControl barDockControlBottom;
             DevExpress.XtraBars.BarDockControl barDockControlLeft;
             DevExpress.XtraBars.BarDockControl barDockControlRight;
+            WebView2 webView21 = new WebView2();
+            TabNavigationPage tpHome = new TabNavigationPage();
             //添加工具栏地址栏还有浏览器组件
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmWeb));
             repositoryItemTextEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemTextEdit();
@@ -206,6 +212,21 @@ namespace Chome
             repositoryItemTextEdit1,
             repositoryItemComboBox1});
 
+            //
+            //
+            //
+        
+            //this.Tp.Controls.Add(this.tabNavigationPage2);
+            //this.Tp.Location = new System.Drawing.Point(155, 156);
+            //this.Tp.Name = "tabPane1";
+            //this.Tp.Pages.AddRange(new DevExpress.XtraBars.Navigation.NavigationPageBase[] {tpHome});
+            //this.Tp.RegularSize = new System.Drawing.Size(656, 333);
+            //this.Tp.SelectedPage = tpHome;
+            //this.Tp.Size = new System.Drawing.Size(656, 333);
+            //this.Tp.TabIndex = 9;
+            //this.Tp.Text = "tabPane1";
+
+
             //Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             Appearance.Options.UseBackColor = true;
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -215,8 +236,23 @@ namespace Chome
             tpHome.Controls.Add(barDockControlRight);
             tpHome.Controls.Add(barDockControlBottom);
             tpHome.Controls.Add(barDockControlTop);
+            tpHome.Caption = tpName;
+            webView21.Name = "webView21";
+            webView21.Dock = DockStyle.Fill;
+            tpHome.Controls.Add(webView21);
+            this.Tp.Controls.Add(tpHome);
+            this.Tp.Pages.AddRange(new DevExpress.XtraBars.Navigation.NavigationPageBase[] {tpHome});
+
+            webView21.Source = new Uri(url);
+            await webView21.EnsureCoreWebView2Async();
+            webView21.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
+            void CoreWebView2_NewWindowRequested(object sender, CoreWebView2NewWindowRequestedEventArgs e)
+            {
+                e.NewWindow = (CoreWebView2)sender;
+                //e.Handled = true;
+            }
             IsMdiContainer = true;
-            Name = "FrmMain";
+            //Name = "FrmMain";
             Text = "Chome Explorer";
             ((System.ComponentModel.ISupportInitialize)(repositoryItemTextEdit1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(repositoryItemComboBox1)).EndInit();
@@ -224,6 +260,5 @@ namespace Chome
             ResumeLayout(false);
             PerformLayout();
         }
-
     }
 }
